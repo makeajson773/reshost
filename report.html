@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>玩家反馈</title>
+        <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/layer/theme/default/layer.css">
+        <link rel="stylesheet" href="static/custom.css">
+        <style type="text/css"></style>
+    </head>
+    <body style="overflow:scroll;">
+		<nav id="topNavBar" class="navbar navbar-default navbar-light fixed-top box-shadow--6dp" style="padding:3px; background-image: linear-gradient(0deg, #dadada 0%, #f1f1f1 50%,#ffffff 100%);">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">玩家反馈</a>
+				</div>
+			</div>
+		</nav>
+        <div class="container-fluid" style="padding-top:46px">
+          <table class="table  table-bordered align-middle">
+            <tbody>
+              <tr>
+                <td class="align-top" style="width:120px;text-align:right">联系客服：</td>
+                <td class="d-flex">
+                    <div class="mx-2">客服QQ：<a href="javascript:window.app.OpenURL('mqqwpa://im/chat?chat_type=wpa&uin=920259001');">920259001</a></div>
+                    <div class="mx-2">客服1✈：<a href="javascript:window.app.OpenURL('tg://resolve?domain=hs2_001');">@hs2_001</a></div>
+                    <div class="mx-2">客服2✈：<a href="javascript:window.app.OpenURL('tg://resolve?domain=hs2_002');">@hs2_002</a></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="align-top" style="width:120px;text-align:right">反馈内容：</td>
+                <td><textarea id="txtReport" style="width:100%;height:120px"></textarea></td>
+              </tr>
+              <tr>
+                <td style="text-align:right"></td>
+                <td><a id="btnReport" class="btn btn-warning">提交反馈</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <script src="static/jquery/jquery.min.js"></script>
+        <script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="static/layer/layer.js"></script>
+        <script>
+            $(document).ready(function() {
+				$("#btnReport").click(function(){
+					var txt = $("#txtReport").val();
+					if (txt.length < 2){
+						layer.msg("请先填写反馈内容");
+						return;
+					}
+					var ret = window.app.remoteCall(1008,''+$("#txtReport").val());
+					if(!ret){
+						layer.msg("反馈失败，如有疑问请联系客服。");
+						return;
+					}
+					var retObj = JSON.parse(ret);
+					if (retObj.result > 0){
+						$("#txtReport").val('');
+						layer.msg("反馈成功，感谢您的支持。");
+					}
+				});
+            });
+        </script>
+    </body>
+</html>

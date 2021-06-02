@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>游戏充值</title>
+		<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/layer/theme/default/layer.css">
+		<link rel="stylesheet" href="static/custom.css">
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<nav id="topNavBar" class="navbar navbar-default navbar-light fixed-top box-shadow--6dp" style="padding:3px; background-image: linear-gradient(0deg, #dadada 0%, #f1f1f1 50%,#ffffff 100%);">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">游戏商城</a>
+					<span>
+						当前剩余点数：<span class="h6 text-danger" id="totalPoint">0</span>
+						&nbsp;点</span>
+				</div>
+				<div class="nav navbar-nav navbar-right">
+					<table>
+						<tbody>
+							<tr>
+								<td style="padding-right:20px">
+									<div>
+										<span>
+											本次合计：<span class="h6 text-success" id="totalMoney">0</span>
+											&nbsp;元</span>
+									</div>
+								</td>
+								<td>
+									<button id="payNow" class="btn btn-success" type="button">立即支付</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</nav>
+		<div class="container-fluid" style="padding-top:50px">
+			<div class="row">
+				<div class="tab-content">
+					<div class="tab-pane show active" id="tab1">
+						<span>请选择购买类型</span>
+						<div id="payType" class="row justify-content-center">
+							<div class="col-sm-3 col-lg-3 pay-card">
+								<div id="payBtn1" class="col-sm-12 btn btn-outline-primary btn-pay-block" data-type="1">
+									<h2>
+										<span class="badge bg-secondary">1000点</span>
+									</h2>
+									<div class="p-2">
+										￥ <span class="h1">100</span>
+										.00</div>
+									<h6>账户余额充值1000点</h6>
+									<!--                                 <p class="text-muted mb-0">每12个月计费</p> -->
+								</div>
+							</div>
+							<div class="col-sm-3 col-lg-3 pay-card">
+								<div id="payBtn2" class="col-sm-12 btn btn-outline-primary active btn-pay-block" data-type="2">
+									<h2>
+										<span class="badge bg-warning">2000点</span>
+									</h2>
+									<div class="p-2">
+										￥ <span class="h1">200</span>
+										.00</div>
+									<h6>账户余额充值2000点</h6>
+									<!--                                 <p class="text-muted mb-0">每6个月计费</p> -->
+								</div>
+							</div>
+							<div class="col-sm-3 col-lg-3 pay-card">
+								<div id="payBtn3" class="col-sm-12 btn btn-outline-primary btn-pay-block" data-type="3">
+									<h2>
+										<span class="badge bg-danger">超级会员</span>
+									</h2>
+									<div class="p-2">
+										￥ <span class="h1">100</span>
+										.00</div>
+									<!--                                 <h5>
+                                    <del class="pr-2 text-danger" id="yj3">¥ 114</del>
+                                    节省 ¥ <span id="js3">6</span>
+                                </h5> -->
+									<h6>升级为超级会员<br />享受无码体验
+                                </h6>
+									<!-- <p class="text-muted mb-0">每31个月计费</p> -->
+								</div>
+							</div>
+						</div>
+						游戏充值说明
+						<ul>
+<li>1点券等于0.1元人民币，HS2点券为游戏内流通货币，可用于购买游戏内所有物品。</li>
+<li>开通普通会员新人首月仅需10点券（1元/月），从次月起每月100点券（10元/月）。</li>
+<li>开通超级会员可享受永久无码体验，开通后在会员有效期内永久有效，更多特权陆续开放中。</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="payModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">请选择支付方式</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div id="payMethod" class="row justify-content-center">
+								<div class="col-sm-4 col-lg-4">
+									<div id="pm_alipay" class="col-sm-12 btn btn-outline-primary btn-pay-type" data-type="alipay">支付宝
+									</div>
+								</div>
+								<div class="col-sm-4 col-lg-4">
+									<div id="pm_wxpay" class="col-sm-12 btn btn-outline-primary btn-pay-type" data-type="wxpay">微信
+									</div>
+								</div>
+								<div class="col-sm-4 col-lg-4">
+									<div  id="pm_code" class="col-sm-12 btn btn-outline-primary btn-pay-type" data-type="code">用激活码升级
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+						<button id="doPay" type="button" class="btn btn-primary">支付</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="payResultModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">订单详情</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<table id="orderDetail">
+								<tbody>
+									<tr>
+										<td style="width:90px">订单编号：</td>
+										<td class="text-start">
+											<span class="h6 text-primary" id="od_orderId">0</span>
+										</td>
+									<tr>
+										<td style="width:90px">订单状态：</td>
+										<td class="text-start">
+											<span class="h6 text-danger" id="od_orderState">未支付</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="payOkay" class="btn btn-secondary" data-bs-dismiss="modal">取消订单</button>
+						<!-- 						<button id="doPay" type="button" class="btn btn-primary">确定</button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="static/jquery/jquery.min.js"></script>
+		<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="static/layer/layer.js"></script>
+		<script src="static/client.js"></script>
+		<script>
+			$(document).ready(function() {
+				function changePayType(type) {
+					var money = 0;
+					switch (type) {
+					case 3:
+					case 1:
+						money = 100;
+						break;
+					case 2:
+						money = 200;
+						break;
+					}
+					$("#totalMoney").text(money);
+				}
+				var payModal = new bootstrap.Modal(document.getElementById('payModal'),{
+					backdrop: 'static',
+					keyboard: false
+				});
+				var eltPayResult = document.getElementById('payResultModal');
+				var payResultModal = new bootstrap.Modal(eltPayResult,{
+					backdrop: 'static',
+					keyboard: false
+				});
+				var lastQueryIndex = 1;
+				var lastOrderId;
+				eltPayResult.addEventListener('hide.bs.modal', function(event) {
+					lastQueryIndex++;
+				});
+
+				var lastPayType = 2;
+
+				function refreshPoint() {
+					try {
+						var app = window.app;
+						if (!app)
+							return;
+						var ret = app.remoteCall(1002, '');
+						if (!ret)
+							return;
+						var retObj = JSON.parse(ret);
+						if (!(retObj.result > 0))
+							return;
+						if (retObj.point > 0)
+							$('#totalPoint').text(retObj.point);
+						//alert(ret);
+					} catch {}
+				}
+
+				refreshPoint();
+
+				function queryOrderState(queryIndex) {
+					if (queryIndex != lastQueryIndex)
+						return;
+					var app = window.app;
+					if (!app)
+						return;
+					var ret = app.remoteCall(1003, '' + lastOrderId);
+					if (!ret || ret.length <= 0) {
+						$("#od_orderState").text("订单异常");
+						return;
+					}
+					var retObj = JSON.parse(ret);
+					if (!(retObj.result > 0)) {
+						if (retObj.result != -1)
+							$("#od_orderState").text("订单异常");
+						return;
+					}
+					if (retObj.state === 1)
+						$("#od_orderState").text("处理中");
+					else if (retObj.state === 2) {
+						$("#od_orderState").removeClass(["text-danger", "text-success", "text-secondary"]);
+						$("#od_orderState").addClass("text-success");
+						$("#od_orderState").text("已支付");
+						$("#payOkay").removeClass(["btn-secondary", "btn-primary", "btn-success"]);
+						$("#payOkay").addClass("btn-success");
+						$("#payOkay").text("确定");
+						refreshPoint();
+						return;
+					} else if (retObj.state === 4) {
+						$("#od_orderState").removeClass(["text-danger", "text-success", "text-secondary"]);
+						$("#od_orderState").addClass("text-success");
+						$("#od_orderState").text("已完成");
+						$("#payOkay").removeClass(["btn-secondary", "btn-primary", "btn-success"]);
+						$("#payOkay").addClass("btn-success");
+						$("#payOkay").text("确定");
+						refreshPoint();
+						return;
+					} else if (retObj.state === 3) {
+						$("#od_orderState").removeClass(["text-danger", "text-success", "text-secondary"]);
+						$("#od_orderState").addClass("text-secondary");
+						$("#od_orderState").text("支付失败");
+						$("#payOkay").removeClass(["btn-secondary", "btn-primary", "btn-success"]);
+						$("#payOkay").addClass("btn-primary");
+						$("#payOkay").text("确定");
+						return;
+					}
+					setTimeout(queryOrderState, 3000, queryIndex);
+				}
+				function startQueryOrderState(orderId) {
+					lastQueryIndex++;
+					setTimeout(queryOrderState, 5000, lastQueryIndex);
+				}
+
+				$('#payType .btn-pay-block').on('click', function() {
+					$('#payType .btn-pay-block').removeClass('active');
+					$(this).addClass('active');
+					var type = parseInt($(this).data('type'));
+					changePayType(type);
+					lastPayType = type;
+				});
+				var lastPayMethod = null;
+				$('#payMethod .btn-pay-type').click(function() {
+					$('#payMethod .btn-pay-type').removeClass('active');
+					$(this).addClass('active');
+					lastPayMethod = $(this).data('type');
+					if (lastPayMethod === "code"){
+						$('#doPay').text("升级");
+					}else{
+						$('#doPay').text("支付");
+					}
+				});
+
+				function doPay(payMethod, payType) {
+					//alert(lastPayMethod + '' + lastPayType);
+					var payRet = app.remoteCall(1001, payMethod + '|' + payType);
+					if (!payRet) {
+						layer.msg('调起支付失败，请联系客服进行购买，或稍后再试。');
+						return;
+					}
+
+					//alert(payRet);
+					var retObj = JSON.parse(payRet);
+					if (!(retObj.result > 0) || !retObj.payURL) {
+						layer.msg('调起支付失败，请联系客服进行购买，或稍后再试。');
+						return;
+					}
+					$("#od_orderId").text(retObj.orderId);
+					payModal.hide();
+					$("#od_orderState").removeClass(["text-danger", "text-success", "text-secondary"]);
+					$("#od_orderState").addClass("text-danger");
+					$("#od_orderState").text("未支付（如已支付，请等待订单自动刷新）");
+					$("#payOkay").removeClass(["btn-secondary", "btn-primary", "btn-success"]);
+					$("#payOkay").addClass("btn-secondary");
+					$("#payOkay").text("取消订单");
+					payResultModal.show();
+					window.app.OpenURL(retObj.payURL);
+					lastOrderId = retObj.orderId;
+					startQueryOrderState(retObj.orderId);
+				}
+				$('#doPay').click(function() {
+					var payBtn = $(this);
+					payBtn.addClass('disabled');
+					payBtn.attr("disabled", true);
+					try {
+						var app = window.app;
+						if (!app) {
+							layer.msg('不支持该操作');
+							return;
+						}
+
+						if (lastPayType === 3 && lastPayMethod === "code"){
+							payModal.hide();
+							layer.prompt({
+								title: '请输入超级会员激活码',
+								offset: 't',
+								btn: ['升级', '取消']
+							}, function(value, index, elem) {
+								if (value.length < 5){
+									layer.msg("请输入正确的超级会员激活码");
+									return;
+								}
+								var ret = app.SetUpgradeCode(value);
+								if (ret === 8){
+									layer.msg("超级会员激活成功。");
+									refreshPoint();
+								}else{
+									layer.msg('超级会员激活码错误。');
+								}
+							});
+							
+						}else{
+							doPay(lastPayMethod, lastPayType);
+						}
+					} finally {
+						payBtn.removeAttr('disabled');
+						payBtn.removeClass('disabled');
+					}
+				});
+
+
+				function tryActiveGame() {
+					var app = window.app;
+					if (!app) {
+						layer.msg('不支持该操作');
+						return;
+					}
+					var ret = app.remoteCall(1004, '');
+					if (!ret) {
+						layer.msg('开通会员失败，请尝试手动开通或联系客服咨询');
+						return;
+					}
+					var retObj = JSON.parse(ret);
+					if (!(retObj.result > 0)) {
+						layer.msg('开通会员失败，请尝试手动开通或联系客服咨询');
+						return;
+					}
+					switch (retObj.result) {
+					case 1:{
+							var activeRet = app.setActiveCode(retObj.code);
+							if (activeRet < 0){
+								layer.msg("开通会员失败活失败，请稍后重试或联系客服");
+								break;
+							}
+							var cf2 = layer.confirm('开通会员成功，是否继续升级为超级会员？', {
+								title: "提示",
+								btn: ['升级', '取消']//按钮
+							}, function() {
+								layer.close(cf2);
+								payNow(3);
+							}, function() {
+							});
+						}break;
+					case 2:
+						{
+							layer.msg('该设备已开通会员，无需再次开通');
+						}
+						break;
+					case 3:
+						{
+							var cf1 = layer.confirm('当前剩余点数不足，是否进行点数充值？', {
+								title: "提示",
+								btn: ['充值', '取消']//按钮
+							}, function() {
+								layer.close(cf1);
+								payNow(1);
+							}, function() {
+							});
+						}
+						break;
+					case 4:
+						layer.msg('开通会员失败，如有疑问，请联系客服');
+						break;
+					}
+
+				}
+
+				function payNow(payType) {
+					var app = window.app;
+					if (!app) {
+						layer.msg('不支持该操作');
+						return;
+					}
+					var payTypes = app.remoteCall(1000, '' + payType);
+					var retObj = JSON.parse(payTypes);
+					if (!retObj || retObj.result < 0) {
+						layer.msg('目前没有可用的支付方式，请联系客服进行购买。');
+						return;
+					}
+					if (retObj.result === 0) {
+						layer.msg(retObj.msg);
+						return;
+					}
+					//alert(payTypes);
+					switch (retObj.result) {
+					case 1:
+						{
+							$("#payMethod .btn-pay-type").hide();
+							if (retObj.methods) {
+								var actived = false;
+								for (var itr in retObj.methods) {
+									var method = retObj.methods[itr];
+									if (method.type) {
+										var btn = $("#pm_" + method.type);
+										if (!actived) {
+											actived = true;
+											lastPayMethod = method.type;
+											btn.addClass('active');
+										} else {
+											btn.removeClass('active');
+										}
+										btn.show();
+									}
+								}
+							}
+							payModal.show();
+						}
+						break;
+					case 2:
+						{
+							//询问框
+							var layerBox = layer.confirm('当前开通普通会员，无法升级，</br>是否花费<span class="text-primary">10</span>个游戏点数开通普通会员？', {
+								title: "提示",
+								btn: ['开通', '取消']//按钮
+							}, function() {
+								layer.close(layerBox);
+								tryActiveGame();
+							}, function() {
+								$("#payBtn1").click();
+							});
+						}
+						break;
+					case 3:{
+						layer.msg("您已是超级会员，无需再次开通");
+					}break;
+					}
+				}
+
+				$('#payNow').click(function() {
+					$(this).attr('disabled', '');
+					try {
+						payNow(lastPayType);
+					} finally {
+						$(this).removeAttr('disabled');
+					}
+
+				});
+				const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const buyType = urlParams.get('buyType');
+                if (typeof(buyType) === 'string')
+                	lastPayType = parseInt(buyType);
+				$("#payBtn" + lastPayType).click();
+			});
+		</script>
+	</body>
+</html>
