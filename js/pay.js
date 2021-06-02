@@ -1,4 +1,5 @@
-$(document).ready(function() {
+$(window).on('load',function() {
+	alert('123');
 	function changePayType(type) {
 		var money = 0;
 		switch (type) {
